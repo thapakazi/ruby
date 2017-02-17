@@ -35,9 +35,27 @@ RUN echo '[ -n "$BASH_VERSION" ] || [ -n "$ZSH_VERSION" ] || return' >> /etc/pro
     echo 'source /usr/local/share/chruby/chruby.sh' >> /etc/profile.d/chruby.sh && \
     echo 'chruby ruby' >> /etc/profile.d/default_ruby.sh
 
-RUN chruby-exec ruby -- gem install bundler
 
 # Clean up APT when done.
-RUN apt-get remove --purge -y ruby && apt-get -y autoremove && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+# RUN apt-get remove --purge -y ruby && apt-get -y autoremove && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-ENV PATH /opt/rubies/ruby-${RUBY_VERSION}/bin:$PATH
+ENV GEM_HOME /usr/local/bundle
+ENV BUNDLE_PATH="$GEM_HOME" \
+  	BUNDLE_BIN="$GEM_HOME/bin" \
+  	BUNDLE_SILENCE_ROOT_WARNING=1 \
+  	BUNDLE_APP_CONFIG="$GEM_HOME"
+# ENV PATH $BUNDLE_BIN:$PATH
+ENV PATH /opt/rubies/ruby-${RUBY_VERSION}/bin:$BUNDLE_BIN:$PATH
+
+RUN  mkdir -p "$GEM_HOME" "$BUNDLE_BIN"&& chmod 777 "$GEM_HOME" "$BUNDLE_BIN" && \
+    { \
+		echo 'install: --no-document'; \
+		echo 'update: --no-document'; \
+	  } > ~/.gemrc && \
+    chruby-exec ruby -- gem install bundler && \
+    apt-get remove --purge -y ruby && \
+    apt-get -y autoremove && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# RUN chruby-exec ruby -- gem install bundler
