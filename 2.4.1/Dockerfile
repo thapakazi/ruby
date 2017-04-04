@@ -21,9 +21,9 @@ RUN curl -SL https://github.com/postmodern/ruby-install/archive/master.tar.gz | 
 
 RUN apt-get update && apt-get install -y ruby && \
     ruby-install \
-    -p https://raw.github.com/skaes/rvm-patchsets/master/patches/ruby/${RUBY_VERSION}/railsexpress/01-skip-broken-tests.patch \
-    -p https://raw.github.com/skaes/rvm-patchsets/master/patches/ruby/${RUBY_VERSION}/railsexpress/02-improve-gc-stats.patch \
-    -p https://raw.github.com/skaes/rvm-patchsets/master/patches/ruby/${RUBY_VERSION}/railsexpress/03-display-more-detailed-stack-trace.patch \
+    # -p https://raw.github.com/skaes/rvm-patchsets/master/patches/ruby/${RUBY_VERSION}/railsexpress/01-skip-broken-tests.patch \
+    # -p https://raw.github.com/skaes/rvm-patchsets/master/patches/ruby/${RUBY_VERSION}/railsexpress/02-improve-gc-stats.patch \
+    # -p https://raw.github.com/skaes/rvm-patchsets/master/patches/ruby/${RUBY_VERSION}/railsexpress/03-display-more-detailed-stack-trace.patch \
     ruby ${RUBY_VERSION} -- --disable-install-rdoc --enable-shared CFLAGS="-O3" && \
     rm -rf /usr/local/src && \
     apt-get remove --purge -y ruby && \
