@@ -1,4 +1,4 @@
-FROM phusion/baseimage:0.9.21
+FROM phusion/baseimage:0.9.19
 MAINTAINER CloudFactory <devops@cloudfactory.com>
 
 ENV DEBIAN_FRONTEND noninteractive
